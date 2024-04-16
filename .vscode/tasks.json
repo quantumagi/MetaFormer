@@ -1,0 +1,52 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build React App",
+            "type": "shell",
+            "command": "npm",
+            "args": ["run", "build"],
+            "group": "build",
+            "problemMatcher": [],     
+            "options": {
+                "cwd": "${workspaceFolder}/frontend"
+            }       
+        },
+        {
+            "label": "Launch Django Server",
+            "type": "shell",
+            "command": "python",
+            "args": ["manage.py", "runserver"],
+            "options": {
+              "cwd": "${workspaceFolder}"
+            },
+            "isBackground": true,
+            "problemMatcher": {
+              "owner": "python",
+              "pattern": {
+                "regexp": "^.+",
+                "file": 1,
+                "location": 2,
+                "message": 3
+              },
+              "background": {
+                "activeOnStart": true,
+                "beginsPattern": "^Performing system checks...",
+                "endsPattern": "^Quit the server with CONTROL-C."
+              }
+            },
+            "presentation": {
+              "reveal": "silent",
+              "panel": "shared",
+              "clear": true
+            }
+        },
+        {
+            "label": "Prepare and Launch Django",
+            "dependsOn": ["Build React App", "Launch Django Server"],
+            "problemMatcher": []
+        }          
+    ]
+}
+
+

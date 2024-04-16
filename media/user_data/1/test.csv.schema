@@ -1,0 +1,1 @@
+{"dayfirst": false, "yearfirst": false, "max_categories": 100, "column_types": {"IntColumn": ["int16", "object", "int64", "float32", "complex", "int32", "int8", "float64"], "StringColumn": ["object"], "CategoryColumn": ["object"]}, "category_values": {}, "position": 2, "status": "complete", "na_values": ["NA", "na"]}
