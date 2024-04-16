@@ -1,6 +1,0 @@
-Name,Birthdate,Score,Grade,Flag,Complex
-Alice,1/01/1990,90,A,True,3+4j
-Bob,Not Available,75,B,False,1+2j
-Charlie,3/03/1992,85,A,True,4
-Not Available,4/04/1993,70,B,False,N/A
-Eve,5/05/1994,Not Available,Not Available,Not Available,0.1
