@@ -18,10 +18,10 @@ import logging
 logger = logging.getLogger(__name__)
 
 # Log these early in case they go missing for some reason
-logger.log("DB_NAME from env:", os.getenv('DB_NAME'))
-logger.log("DB_HOST from env:", os.getenv('DB_HOST'))
-logger.log("DB_PORT from env:", os.getenv('DB_PORT'))
-logger.log("DB_USER from env:", os.getenv('DB_USER'))
+logger.info("DB_NAME from env:", os.getenv('DB_NAME'))
+logger.info("DB_HOST from env:", os.getenv('DB_HOST'))
+logger.info("DB_PORT from env:", os.getenv('DB_PORT'))
+logger.info("DB_USER from env:", os.getenv('DB_USER'))
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
