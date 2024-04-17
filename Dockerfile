@@ -1,5 +1,5 @@
 # Use an official Python image as the base
-FROM python:3.8-slim
+FROM python:3.12.2
 
 # Prevent Python from writing pyc files to disc
 ENV PYTHONDONTWRITEBYTECODE 1
