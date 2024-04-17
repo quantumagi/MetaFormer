@@ -111,10 +111,11 @@ DATABASES = {
 # Database settings for testing (using PostgreSQL)
 DATABASES['test'] = {
     'ENGINE': 'django.db.backends.postgresql',
-    'NAME': 'postgres',  # Change this to the name of your test database
-    'USER': 'postgres',
-    'PASSWORD': 'postgres',
-    'HOST': 'localhost',
+    'NAME': os.getenv('DB_NAME', 'postgres'),
+    'USER': os.getenv('DB_USER', 'postgres'),
+    'PASSWORD': os.getenv('DB_PASSWORD', 'postgres'),
+    'HOST': os.getenv('DB_HOST', 'localhost'),
+    'PORT': os.getenv('DB_PORT', '5432'),
 }
 
 # Password validation
