@@ -72,7 +72,7 @@ class PostgresqlRepository:
         except psycopg2.OperationalError as e:
             logger.error("Error occurred while connecting to PostgreSQL:", exc_info=True)
             logger.error("Make sure PostgreSQL is installed and running.")
-            sys.exit(1)
+            raise e
             
     @staticmethod
     def get_dbname(for_user):
@@ -97,6 +97,8 @@ class PostgresqlRepository:
 
         # Connect to the newly created database or existing one
         connection = PostgresqlRepository._get_postgres_connection(dbname)
+        if connection is None:
+            raise Exception("Error occurred while connecting to PostgreSQL.")
         #connection.set_isolation_level(psycopg2.extensions.ISOLATION_LEVEL_READ_COMMITTED)
         PostgresqlRepository._ensure_tables_exist(connection)
         return connection
@@ -112,14 +114,16 @@ class PostgresqlRepository:
             return connection
         except psycopg2.OperationalError as e:
             logger.error("Error occurred while connecting to PostgreSQL:", exc_info=True)
-            logger.error("Make sure PostgreSQL is installed and running.")
-            sys.exit(1)                    
+            logger.error("Make sure PostgreSQL is installed and running.")   
+            raise Exception("Error occurred while connecting to PostgreSQL.")             
             
     @staticmethod
     def drop_repository(for_user):
         # Drops the database and all tables
         dbname = f"{DATASET_DATABASE_PREFIX}{for_user}"
         connection = PostgresqlRepository._get_postgres_connection()
+        if connection is None:
+            return
         #connection.set_isolation_level(psycopg2.extensions.ISOLATION_LEVEL_READ_COMMITTED)
         cursor = connection.cursor()
         cursor.execute("COMMIT;")
