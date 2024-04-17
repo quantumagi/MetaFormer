@@ -9,12 +9,10 @@ ENV PYTHONUNBUFFERED 1
 # Set the working directory in the container
 WORKDIR /app
 
-# Install Python dependencies
-COPY requirements.txt /app/
-RUN pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
-
 # Copy the current directory contents into the container at /app
 COPY . /app/
+
+RUN pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
 
 # Make port 8000 available to the outside from the container
 EXPOSE 8000
