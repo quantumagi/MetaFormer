@@ -47,17 +47,13 @@ jobs:
 
     - name: Create superuser
       env:
-        DJANGO_SUPERUSER_USERNAME: ${{ secrets.SUPERUSER_USERNAME }}
-        DJANGO_SUPERUSER_EMAIL: ${{ secrets.SUPERUSER_EMAIL }}
-        DJANGO_SUPERUSER_PASSWORD: ${{ secrets.SUPERUSER_PASSWORD }}
-      run: |
-        python manage.py shell -c "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.filter(username='${DJANGO_SUPERUSER_USERNAME}').exists() or User.objects.create_superuser('${DJANGO_SUPERUSER_USERNAME}', '${DJANGO_SUPERUSER_EMAIL}', '${DJANGO_SUPERUSER_PASSWORD}')"
+        SUPERUSER_USERNAME: ${{ secrets.SUPERUSER_USERNAME }}
+        SUPERUSER_EMAIL: ${{ secrets.SUPERUSER_EMAIL }}
+        SUPERUSER_PASSWORD: ${{ secrets.SUPERUSER_PASSWORD }}
+      run: sh -c "python manage.py migrate && python manage.py shell -c 'from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.filter(username=\"'$SUPERUSER_USERNAME'\").exists() or User.objects.create_superuser(\"'$SUPERUSER_USERNAME'\", \"'$SUPERUSER_EMAIL'\", \"'$SUPERUSER_PASSWORD'\")'"
 
     - name: Run tests
       env:
-        DJANGO_SUPERUSER_USERNAME: ${{ secrets.SUPERUSER_USERNAME }}
-        DJANGO_SUPERUSER_EMAIL: ${{ secrets.SUPERUSER_EMAIL }}
-        DJANGO_SUPERUSER_PASSWORD: ${{ secrets.SUPERUSER_PASSWORD }}
         DB_NAME: postgres
         DB_USER: postgres
         DB_PASSWORD: postgres
