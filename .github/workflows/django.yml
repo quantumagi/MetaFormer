@@ -42,12 +42,17 @@ jobs:
         pip install -r requirements.txt
         pip install psycopg2-binary  # Ensure psycopg2 is installed to use PostgreSQL
 
-    - name: Run Tests
+    - name: Run migrations
+      run: python manage.py migrate
+
+    - name: Create superuser
       env:
-        # Environment variables for the database connection
-        DJANGO_SETTINGS_MODULE: metaformer.settings
-        DATABASE_URL: postgres://postgres:postgres@localhost:5432/postgres
+        DJANGO_SUPERUSER_USERNAME: ${{ secrets.SUPERUSER_USERNAME }}
+        DJANGO_SUPERUSER_EMAIL: ${{ secrets.SUPERUSER_EMAIL }}
+        DJANGO_SUPERUSER_PASSWORD: ${{ secrets.SUPERUSER_PASSWORD }}
       run: |
-        python manage.py migrate  # Run migrations as part of the tests
-        python manage.py test
+        python manage.py shell -c "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.filter(username='$DJANGO_SUPERUSER_USERNAME').exists() or User.objects.create_superuser('$DJANGO_SUPERUSER_USERNAME', '$DJANGO_SUPERUSER_EMAIL', '$DJANGO_SUPERUSER_PASSWORD')"
+
+    - name: Run tests
+      run: python manage.py test
 
