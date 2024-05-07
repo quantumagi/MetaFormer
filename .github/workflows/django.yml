@@ -50,7 +50,21 @@ jobs:
         SUPERUSER_USERNAME: ${{ secrets.SUPERUSER_USERNAME }}
         SUPERUSER_EMAIL: ${{ secrets.SUPERUSER_EMAIL }}
         SUPERUSER_PASSWORD: ${{ secrets.SUPERUSER_PASSWORD }}
-      run: sh -c "python manage.py migrate && python manage.py shell -c 'from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.filter(username=\"'$SUPERUSER_USERNAME'\").exists() or User.objects.create_superuser(\"'$SUPERUSER_USERNAME'\", \"'$SUPERUSER_EMAIL'\", \"'$SUPERUSER_PASSWORD'\")'"
+      run: |
+        python manage.py migrate
+        python manage.py shell -c "\
+          from django.contrib.auth import get_user_model; \
+          User = get_user_model(); \
+          username='${SUPERUSER_USERNAME}'; \
+          email='${SUPERUSER_EMAIL}'; \
+          password='${SUPERUSER_PASSWORD}'; \
+          user, created = User.objects.get_or_create(username=username, defaults={'email': email, 'is_staff': True, 'is_superuser': True}); \
+          if created: \
+            user.set_password(password); \
+            user.save(); \
+            print('Superuser created'); \
+          else: \
+            print('Superuser already exists');"
 
     - name: Run tests
       env:
