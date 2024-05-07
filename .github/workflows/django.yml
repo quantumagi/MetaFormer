@@ -9,8 +9,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      DJANGO_SETTINGS_MODULE: metaformer.settings
     services:
       postgres:
         image: postgres:13
@@ -47,8 +45,8 @@ jobs:
     - name: Run Tests
       env:
         # Environment variables for the database connection
-        DJANGO_SETTINGS_MODULE: your_project.settings
-        DATABASE_URL: postgres://postgres:postgres@localhost:5432/mytestdb
+        DJANGO_SETTINGS_MODULE: metaformer.settings
+        DATABASE_URL: postgres://postgres:postgres@localhost:5432/postgres
       run: |
         python manage.py migrate  # Run migrations as part of the tests
         python manage.py test
