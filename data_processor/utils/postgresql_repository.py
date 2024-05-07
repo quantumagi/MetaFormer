@@ -106,10 +106,10 @@ class PostgresqlRepository:
     @staticmethod
     def _get_postgres_connection(dbname='postgres'):
         try:
-            dbname = dbname or settings.DATABASES['test']['NAME']
-            dbuser = settings.DATABASES['test']['USER']
-            dbpassword = settings.DATABASES['test']['PASSWORD']
-            dbhost = settings.DATABASES['test']['HOST']
+            dbname = dbname or settings.DATABASES['repos']['NAME']
+            dbuser = settings.DATABASES['repos']['USER']
+            dbpassword = settings.DATABASES['repos']['PASSWORD']
+            dbhost = settings.DATABASES['repos']['HOST']
             connection = psycopg2.connect(dbname=dbname, user=dbuser, password=dbpassword, host=dbhost)
             return connection
         except psycopg2.OperationalError as e:
