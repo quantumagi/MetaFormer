@@ -8,8 +8,22 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:13
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     strategy:
       max-parallel: 4
       matrix:
@@ -21,10 +35,19 @@ jobs:
       uses: actions/setup-python@v3
       with:
         python-version: ${{ matrix.python-version }}
+
     - name: Install Dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
+        pip install psycopg2-binary  # Ensure psycopg2 is installed to use PostgreSQL
+
     - name: Run Tests
+      env:
+        # Environment variables for the database connection
+        DJANGO_SETTINGS_MODULE: your_project.settings
+        DATABASE_URL: postgres://postgres:postgres@localhost:5432/mytestdb
       run: |
+        python manage.py migrate  # Run migrations as part of the tests
         python manage.py test
+
